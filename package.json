@@ -1,6 +1,6 @@
 {
   "name": "darkside-sse",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Scaleable SSE Channels abstraction for Koa",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
@@ -19,7 +19,7 @@
     "url": "https://github.com/dhleong/darkside"
   },
   "dependencies": {
-    "lightside": "1.0.0",
+    "lightside": "^1.0.0",
     "redis": "^2.8.0",
     "typescript": "^3.1.3"
   },
