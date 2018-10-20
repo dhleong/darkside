@@ -1,12 +1,15 @@
 {
-  "name": "darkside",
+  "name": "darkside-sse",
   "version": "1.0.0",
   "description": "Scaleable SSE Channels abstraction for Koa",
   "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "scripts": {
     "build": "tsc -p .",
-    "check": "npm run lint && npm run build",
+    "check": "npm run lint && npm test",
     "lint": "tslint -p .",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run check",
     "test": "mocha -r ts-node/register 'test/**/*.ts'"
   },
   "author": "Daniel Leong",
@@ -16,7 +19,7 @@
     "url": "https://github.com/dhleong/darkside"
   },
   "dependencies": {
-    "lightside": "~/git/lightside",
+    "lightside": "1.0.0",
     "redis": "^2.8.0",
     "typescript": "^3.1.3"
   },
