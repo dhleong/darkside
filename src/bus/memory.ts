@@ -1,29 +1,36 @@
-import { IDarksideBus } from "../interface";
 import { IEvent, ServerSideEvents } from "lightside";
+
 import { Channel } from "../channel";
+import { SimpleDarksideBus } from "../interface";
 
 /**
  * Simple, in-memory Bus implementation
  */
-export class MemoryBus implements IDarksideBus {
+export class MemoryBus extends SimpleDarksideBus {
 
     private channels: {[id: string]: Channel} = {};
 
-    send(channelId: string, event: IEvent | string | Buffer): boolean {
+    public countInChannel(channelId: string) {
+        const c = this.channels[channelId];
+        if (!c) return 0;
+        return this.channels[channelId].size;
+    }
+
+    public send(channelId: string, event: IEvent | string | Buffer): boolean {
         const c = this.channels[channelId];
         if (!c) return false;
 
         return c.send(event);
     }
 
-    register(channelId: string, events: ServerSideEvents): void {
+    protected _register1(channelId: string, subscriber: ServerSideEvents) {
         if (!this.channels[channelId]) {
             this.channels[channelId] = new Channel();
         }
-        this.channels[channelId].add(events);
+        this.channels[channelId].add(subscriber);
     }
 
-    unregister(channelId: string, events: ServerSideEvents): void {
+    protected _unregister1(channelId: string, events: ServerSideEvents): void {
         const c = this.channels[channelId];
         if (!c) return;
 

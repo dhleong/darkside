@@ -3,6 +3,10 @@ import { IEvent, ServerSideEvents } from "lightside";
 export class Channel {
     private members: Set<ServerSideEvents> = new Set();
 
+    get size(): number {
+        return this.members.size;
+    }
+
     public add(member: ServerSideEvents) {
         this.members.add(member);
     }

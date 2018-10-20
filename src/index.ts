@@ -4,6 +4,7 @@ import "lightside";
 import { IDarksideBus } from "./interface";
 
 export { MemoryBus } from "./bus/memory";
+export { RedisBus } from "./bus/redis";
 
 /**
  * Middleware factory.
@@ -26,24 +27,12 @@ export function darkside(opts: {
         }
 
         const channelIds = await opts.extractChannelIds(ctx);
-        if (typeof channelIds === "string") {
-            opts.bus.register(channelIds, ctx.events);
-        } else {
-            for (const id of channelIds) {
-                opts.bus.register(id, ctx.events);
-            }
-        }
+        opts.bus.register(channelIds, ctx.events);
 
         ctx.events.on("close", () => {
             if (opts.onClose) opts.onClose(ctx);
 
-            if (typeof channelIds === "string") {
-                opts.bus.unregister(channelIds, ctx.events);
-            } else {
-                for (const id of channelIds) {
-                    opts.bus.unregister(id, ctx.events);
-                }
-            }
+            opts.bus.unregister(channelIds, ctx.events);
         });
 
         return next();
