@@ -9,17 +9,22 @@ import { MemoryBus } from "./memory";
  */
 export class RedisBus extends SimpleDarksideBus {
 
-    private sub: RedisClient;
     private local = new MemoryBus();
 
     constructor(
         private redis: RedisClient,
+
+        /**
+         * sub is a separate connection on which we process
+         * pubsub commands, since a connection in pubsub mode
+         * can ONLY process pubsub commands. By default we just
+         * duplicate the main `redis` client, but you can provide
+         * your own if you need more control
+         */
+        private sub: RedisClient = redis.duplicate(),
     ) {
         super();
 
-        // duplicate, because in subscribe mode we can only send
-        // subscription-related commands
-        this.sub = redis.duplicate();
         this.sub.on("message", (channelId, message) => {
             const { event } = JSON.parse(message);
             this.local.send(channelId, event);
