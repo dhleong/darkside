@@ -3,6 +3,7 @@ import "lightside";
 
 import { IDarksideBus } from "./interface";
 
+export { Channel } from "./channel";
 export { IDarksideBus } from "./interface";
 export { MemoryBus } from "./bus/memory";
 export { RedisBus } from "./bus/redis";

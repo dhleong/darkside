@@ -5,18 +5,10 @@ import { RedisClient } from "redis";
 
 import { RedisBus } from "../../src/bus/redis";
 
+import { TestableSSE } from "../testable-sse";
 import { FakeRedis } from "./fake-redis";
 
 chai.should();
-
-class TestableSSE extends ServerSideEvents {
-
-    public sent: any[] = [];
-
-    public send(event: IEvent | string | Buffer) {
-        this.sent.push(event);
-    }
-}
 
 const network = () => new Promise(resolve => {
     // setTimeout(resolve, 10);

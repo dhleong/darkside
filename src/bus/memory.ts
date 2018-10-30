@@ -8,11 +8,12 @@ import { ICountableDarksideBus, SimpleDarksideBus } from "../interface";
  */
 export class MemoryBus extends SimpleDarksideBus implements ICountableDarksideBus {
 
-    private channels: {[id: string]: Channel} = {};
+    protected channels: {[id: string]: Channel} = {};
 
     public countInChannel(channelId: string) {
         const c = this.channels[channelId];
         if (!c) return 0;
+
         return this.channels[channelId].size;
     }
 
