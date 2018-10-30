@@ -1,16 +1,25 @@
 import { IEvent, ServerSideEvents } from "lightside";
 import { RedisClient } from "redis";
 
-import { SimpleDarksideBus } from "../interface";
+import { ICountableDarksideBus, SimpleDarksideBus } from "../interface";
 import { MemoryBus } from "./memory";
 
 /**
- * Redis-backed IDarksideBus implementation
+ * Redis-backed IDarksideBus implementation. The RedisBus does not
+ * duplicate logic for handling local connections, but instead acts
+ * as a layer on top of another bus, providing cross-process bridging
+ * via Redis pubsub.
  */
 export class RedisBus extends SimpleDarksideBus {
 
-    private local = new MemoryBus();
-
+    /**
+     * @param redis The main RedisClient, used to publish events
+     * @param sub The RedisClient to use for subscriptions. It
+     *  will be put into pubsub mode if not already there. Defaults
+     *  to `redis.duplicate()`.
+     * @param local An [ICountableDarksideBus] to whom local connections
+     *  are delegated. Defaults to a new [MemoryBus].
+     */
     constructor(
         private redis: RedisClient,
 
@@ -22,6 +31,8 @@ export class RedisBus extends SimpleDarksideBus {
          * your own if you need more control
          */
         private sub: RedisClient = redis.duplicate(),
+
+        private local: ICountableDarksideBus = new MemoryBus(),
     ) {
         super();
 

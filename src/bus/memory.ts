@@ -1,12 +1,12 @@
 import { IEvent, ServerSideEvents } from "lightside";
 
 import { Channel } from "../channel";
-import { SimpleDarksideBus } from "../interface";
+import { ICountableDarksideBus, SimpleDarksideBus } from "../interface";
 
 /**
  * Simple, in-memory Bus implementation
  */
-export class MemoryBus extends SimpleDarksideBus {
+export class MemoryBus extends SimpleDarksideBus implements ICountableDarksideBus {
 
     private channels: {[id: string]: Channel} = {};
 

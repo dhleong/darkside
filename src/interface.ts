@@ -8,6 +8,15 @@ export interface IDarksideBus {
 }
 
 /**
+ * ILocalDarksideBus is a special case of IDarksideBus
+ * which can directly track the number of clients listening
+ * to a given channel.
+ */
+export interface ICountableDarksideBus extends IDarksideBus {
+    countInChannel(channelId: string): number;
+}
+
+/**
  * Abstract base class that simplifies handling of 1 vs N channels for register/unregister
  */
 export abstract class SimpleDarksideBus implements IDarksideBus {
